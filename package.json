@@ -5,8 +5,8 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "test:api": "newman run collections/Restful-booker.postman_collection.json -e environments/Restful-booker.postman_environment.json",
-    "test:report": "newman run collections/Restful-booker.postman_collection.json -e environments/Restful-booker.postman_environment.json -r cli,htmlextra --reporter-htmlextra-export reports/report.html"
+    "test:api": "npx newman run collections/Restful-booker.postman_collection.json -e environments/Restful-booker.postman_environment.json",
+    "test:report": "npx newman run collections/Restful-booker.postman_collection.json -e environments/Restful-booker.postman_environment.json -r cli,htmlextra --reporter-htmlextra-export reports/report.html"
   },
   "keywords": [],
   "type": "commonjs",
