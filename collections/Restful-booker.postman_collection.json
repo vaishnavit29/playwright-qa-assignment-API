@@ -1,0 +1,412 @@
+{
+  "info": {
+    "_postman_id": "11310c9a-8201-4713-b923-2d0c62455a61",
+    "name": "Restful-booker",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "43781774",
+    "_collection_link": "https://go.postman.co/collection/43781774-11310c9a-8201-4713-b923-2d0c62455a61?source=collection_link"
+  },
+  "item": [
+    {
+      "name": "Generate Token",
+      "event": [
+        {
+          "listen": "prerequest",
+          "script": {
+            "exec": [
+              ""
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        },
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "var json=pm.response.json();\r",
+              "pm.environment.set(\"token\",json.token)\r",
+              "\r",
+              "pm.test(\"Verify token generation\",function(){\r",
+              "    pm.expect(json.token).to.not.be.null\r",
+              "})\r",
+              "pm.test(\"Verify status code\",function(){\r",
+              "    pm.expect(pm.response.code).to.eql(200)\r",
+              "})\r",
+              "\r",
+              ""
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n    \"username\" : \"admin\",\n    \"password\" : \"password123\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{Base_Url}}/auth",
+          "host": [
+            "{{Base_Url}}"
+          ],
+          "path": [
+            "auth"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Get Booking Ids",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json",
+            "type": "text"
+          }
+        ],
+        "url": {
+          "raw": "{{Base_Url}}/booking",
+          "host": [
+            "{{Base_Url}}"
+          ],
+          "path": [
+            "booking"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Create Booking",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "var json=pm.response.json();\r",
+              "pm.environment.set(\"ID\",json.bookingid)\r",
+              "\r",
+              "pm.test(\"Status code is 200\", function () {\r",
+              "    pm.response.to.have.status(200);\r",
+              "})\r",
+              "pm.test(\"Verify first name of user\",()=>{\r",
+              "    pm.expect(json.booking.firstname).to.eql(pm.environment.get(\"First_Name\"));\r",
+              "})\r",
+              "pm.test(\"Verify the last name of user\", () => {\r",
+              "    pm.expect(json.booking.lastname).to.eql(pm.environment.get(\"Last_Name\"));\r",
+              "});\r",
+              "\r",
+              "pm.test(\"Verify the total price\", () => {\r",
+              "    pm.expect(json.booking.totalprice).to.eql(Number(pm.environment.get(\"Total_Price\")));\r",
+              "});\r",
+              "\r",
+              "if(pm.response.code===201){\r",
+              "    console.log(\"Booking got created successfully with booking Id: \"+json.booking.id)\r",
+              "}\r",
+              ""
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        },
+        {
+          "listen": "prerequest",
+          "script": {
+            "exec": [
+              ""
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n    \"firstname\" : \"{{First_Name}}\",\n    \"lastname\" : \"{{Last_Name}}\",\n    \"totalprice\" : {{Total_Price}},\n    \"depositpaid\" : true,\n    \"bookingdates\" : {\n        \"checkin\" : \"2018-01-01\",\n        \"checkout\" : \"2019-01-01\"\n    },\n    \"additionalneeds\" : \"Breakfast\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{Base_Url}}/booking",
+          "host": [
+            "{{Base_Url}}"
+          ],
+          "path": [
+            "booking"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Get Booking details",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "var json=pm.response.json();\r",
+              "\r",
+              "pm.test(\"Verify status code is 200\",()=>{\r",
+              "    pm.expect(pm.response.code).to.eql(200);\r",
+              "})\r",
+              "pm.test(\"Verify the first name user\",()=>{\r",
+              "    pm.expect(json.firstname).to.eql(pm.environment.get(\"First_Name\"));\r",
+              "})\r",
+              "pm.test(\"Verify the last name user\", () => {\r",
+              "    pm.expect(json.lastname).to.eql(pm.environment.get(\"Last_Name\"));\r",
+              "})\r",
+              "pm.test(\"Verify the total price\", () => {\r",
+              "    pm.expect(json.totalprice).to.eql(Number(pm.environment.get(\"Total_Price\")));\r",
+              "})\r",
+              ""
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        },
+        {
+          "listen": "prerequest",
+          "script": {
+            "exec": [
+              "//pm.environment.get(\"ID\");"
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        }
+      ],
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{Base_Url}}/booking/{{ID}}",
+          "host": [
+            "{{Base_Url}}"
+          ],
+          "path": [
+            "booking",
+            "{{ID}}"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Update Booking",
+      "event": [
+        {
+          "listen": "prerequest",
+          "script": {
+            "exec": [
+              ""
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        },
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "    console.log(pm.response.text())\r",
+              "var json = pm.response.json();\r",
+              "\r",
+              "pm.test(\"Verify the updated first name\", () => {\r",
+              "    pm.expect(json.firstname).to.eql(pm.environment.get(\"Update_First_Name\"));\r",
+              "});\r",
+              "\r",
+              "pm.test(\"Verify the updated last name\", () => {\r",
+              "    pm.expect(json.lastname).to.eql(pm.environment.get(\"Update_Last_Name\"));\r",
+              "});\r",
+              "\r",
+              "pm.test(\"Verify the updated total price\", () => {\r",
+              "    pm.expect(json.totalprice).to.eql(Number(pm.environment.get(\"Update_Total_Price\")));\r",
+              "});\r",
+              "\r",
+              "if (pm.response.code === 200) {\r",
+              "console.log(\"Updated details successfully as below\")\r",
+              "    console.log(\"First Name: \" + json.firstname)\r",
+              "    console.log(\"Last_Name: \"+json.lastname)\r",
+              "    console.log(\"Total Price: \" + json.totalprice)\r",
+              "}\r",
+              ""
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        }
+      ],
+      "request": {
+        "method": "PUT",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          },
+          {
+            "key": "Accept",
+            "value": "application/json"
+          },
+          {
+            "key": "Cookie",
+            "value": "token={{token}}"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n    \"firstname\" : \"{{Update_First_Name}}\",\n    \"lastname\" : \"{{Update_Last_Name}}\",\n    \"totalprice\" : {{Update_Total_Price}},\n    \"depositpaid\" : true,\n    \"bookingdates\" : {\n        \"checkin\" : \"2018-01-01\",\n        \"checkout\" : \"2019-01-01\"\n    },\n    \"additionalneeds\" : \"Breakfast\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{Base_Url}}/booking/{{ID}}",
+          "host": [
+            "{{Base_Url}}"
+          ],
+          "path": [
+            "booking",
+            "{{ID}}"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Delete Booking",
+      "event": [
+        {
+          "listen": "prerequest",
+          "script": {
+            "exec": [
+              "var token = pm.environment.get(\"token\");"
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        },
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"Status code is 201\", function () {\r",
+              "    pm.expect(pm.response.code).to.eql(201);\r",
+              "})\r",
+              "if (pm.response.code === 201) {\r",
+              "    console.log(\"User got deleted successfully\")\r",
+              "}"
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        }
+      ],
+      "request": {
+        "method": "DELETE",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          },
+          {
+            "key": "Cookie",
+            "value": "token={{token}}"
+          }
+        ],
+        "url": {
+          "raw": "{{Base_Url}}/booking/{{ID}}",
+          "host": [
+            "{{Base_Url}}"
+          ],
+          "path": [
+            "booking",
+            "{{ID}}"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "New Request",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{Base_Url}}/ping",
+          "host": [
+            "{{Base_Url}}"
+          ],
+          "path": [
+            "ping"
+          ]
+        }
+      },
+      "response": []
+    }
+  ],
+  "event": [
+    {
+      "listen": "prerequest",
+      "script": {
+        "type": "text/javascript",
+        "packages": {},
+        "requests": {},
+        "exec": [
+          ""
+        ]
+      }
+    },
+    {
+      "listen": "test",
+      "script": {
+        "type": "text/javascript",
+        "packages": {},
+        "requests": {},
+        "exec": [
+          ""
+        ]
+      }
+    }
+  ]
+}

@@ -1,0 +1,17 @@
+{
+  "name": "restful-booker-api-automation",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "test:api": "newman run collections/Restful-booker.postman_collection.json -e environments/Restful-booker.postman_environment.json",
+    "test:report": "newman run collections/Restful-booker.postman_collection.json -e environments/Restful-booker.postman_environment.json -r cli,htmlextra --reporter-htmlextra-export reports/report.html"
+  },
+  "keywords": [],
+  "type": "commonjs",
+  "devDependencies": {
+    "newman": "^6.2.3",
+    "newman-reporter-htmlextra": "^1.23.1"
+  }
+}
