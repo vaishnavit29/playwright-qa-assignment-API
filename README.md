@@ -84,8 +84,37 @@ restful-booker-api-automation
 | Update_Total_Price | Updated Total Price |
 
 ---
+## Prerequisites
+
+Before running the tests, ensure the following are installed:
+
+- Node.js (v18 or higher)
+- Visual Studio Code
+- Git
+
+Verify installation:
+
+```bash
+node -v
+npm -v
+git --version
+```
+
+---
 
 ## Running Tests Locally
+
+### Clone Repository
+
+```bash
+git clone https://github.com/vaishnavit29/playwright-qa-assignment-API.git
+```
+
+### Navigate to Project
+
+```bash
+cd playwright-qa-assignment-API
+```
 
 ### Install Dependencies
 
@@ -93,11 +122,13 @@ restful-booker-api-automation
 npm install
 ```
 
-### Execute Collection
+### Execute API Collection
 
 ```bash
 npm run test:api
 ```
+
+This command executes all CRUD and negative API test scenarios using Newman.
 
 ### Generate HTML Report
 
@@ -105,12 +136,25 @@ npm run test:api
 npm run test:report
 ```
 
-Report will be generated in:
+Report Location:
 
 ```text
 reports/report.html
 ```
 
+Open the generated report in any browser to review execution results.
+
+---
+
+## CI/CD
+
+GitHub Actions is configured to automatically execute the API test suite on every Pull Request.
+
+Workflow file:
+
+```text
+.github/workflows/api-tests.yml
+```
 ---
 
 ## Newman Commands
